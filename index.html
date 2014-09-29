@@ -1,0 +1,46 @@
+
+<html ng-app="Soccer">
+	<head>
+		<title>Soccer app</title>
+		<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+		<!-- Optional theme -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+	</head>
+	<body>
+		
+		<h1>Teams</h1>
+		
+		<table class="table" ng-controller="TeamController">
+			<tr>
+				<td></td>
+				<td>Name</td>
+				<td></td>
+			</tr>
+			<tr ng-repeat="team in teams">
+				<td><img ng-src="{{team.logouri}}" /></td>
+				<td>{{team.name}}</td>
+				<td><button ng-click="remove(team.identifier)">x</button></td>
+			</tr>
+		</table>
+		
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.24/angular.min.js"></script>
+		<script>
+			angular.module('Soccer',[]).controller('TeamController', function($scope, $http) {
+				function loadTeams() {			
+					$http.get('rest/team').success(function(response) {
+						$scope.teams = response;
+					});
+				};
+				
+				$scope.remove = function(teamId) {
+					$http['delete']('rest/team?id='+teamId).success(function(response) {
+						loadTeams();
+					});
+				}
+				loadTeams();
+			})
+		</script>		
+	</body>
+</html>
+
